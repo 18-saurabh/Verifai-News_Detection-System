@@ -1,6 +1,7 @@
 import * as tf from '@tensorflow/tfjs';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AnalysisResult, ContentStatistics, ImageAnalysis } from './types';
+import i18n from '../i18n';
 
 // Initialize Gemini API
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -220,32 +221,14 @@ export const analyzeText = async (text: string): Promise<AnalysisResult> => {
   const timelineAnalysis = analyzeTimeline(text);
   const citationAnalysis = analyzeCitations(text);
 
-  // Add warnings based on enhanced analysis
-  if (timelineAnalysis.hasInconsistencies) {
-    warnings.push('Potential timeline inconsistencies detected in the dates mentioned.');
-    credibilityScore -= 15;
-  }
-
-  if (!citationAnalysis.hasCitations) {
-    warnings.push('No citations or external references found.');
-    suggestions.push('Consider adding references to support the claims.');
-    credibilityScore -= 10;
-  }
-
-  if (statistics.emotionalTone.urgent > 2) {
-    warnings.push('High usage of urgency-indicating language detected.');
-    suggestions.push('Check if the urgency is warranted by the facts.');
-    credibilityScore -= 5;
-  }
-
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     
-    const prompt = `You are a fact-checking system that ONLY responds with valid JSON.
+    const prompt = `You are a fact-checking system that ONLY responds with valid JSON. Analyze the following content in ${i18n.language === 'hi' ? 'Hindi' : 'English'} language.
 
-Your task is to analyze the following news article for credibility and misinformation.
+Your task is to analyze the following text for credibility and misinformation.
 
-CRITICAL: Your response MUST be a single JSON object with EXACTLY this structure:
+CRITICAL: Your response MUST be a single JSON object with EXACTLY this structure, and ALL text fields must be in ${i18n.language === 'hi' ? 'Hindi' : 'English'}:
 {
   "isFactual": boolean,
   "credibilityScore": number between 0 and 100,
@@ -268,7 +251,7 @@ CRITICAL: Your response MUST be a single JSON object with EXACTLY this structure
   }
 }
 
-Article to analyze: "${text}"`;
+Text to analyze: "${text}"`;
 
     const result = await model.generateContent(prompt);
     const response = result.response;
@@ -280,17 +263,23 @@ Article to analyze: "${text}"`;
       const jsonString = jsonMatch ? jsonMatch[0] : responseText;
       analysis = JSON.parse(jsonString);
       
-      // Get search URLs for relevant articles based on content keywords
       const relevantSources = getRelevantArticleSearches(statistics.topKeywords);
       
-      // Add verification details for each source
       const sources = relevantSources.map(source => ({
         ...source,
         verificationDetails: [
-          "Click to search for related articles from this trusted source",
-          "Compare the content with verified news coverage",
-          "Check dates and details for accuracy",
-          "Verify claims against multiple sources"
+          i18n.language === 'hi' 
+            ? "इस विश्वसनीय स्रोत से संबंधित लेखों की खोज के लिए क्लिक करें"
+            : "Click to search for related articles from this trusted source",
+          i18n.language === 'hi'
+            ? "सत्यापित समाचार कवरेज के साथ सामग्री की तुलना करें"
+            : "Compare the content with verified news coverage",
+          i18n.language === 'hi'
+            ? "सटीकता के लिए तिथियों और विवरणों की जांच करें"
+            : "Check dates and details for accuracy",
+          i18n.language === 'hi'
+            ? "कई स्रोतों के खिलाफ दावों की पुष्टि करें"
+            : "Verify claims against multiple sources"
         ]
       }));
 
@@ -321,17 +310,29 @@ Article to analyze: "${text}"`;
     return {
       credibilityScore: 0,
       warnings: [
-        'Unable to perform analysis due to an API error.',
-        'Please ensure your API key is valid and has sufficient quota.'
+        i18n.language === 'hi'
+          ? 'API त्रुटि के कारण विश्लेषण करने में असमर्थ।'
+          : 'Unable to perform analysis due to an API error.',
+        i18n.language === 'hi'
+          ? 'कृपया सुनिश्चित करें कि आपकी API कुंजी मान्य है और पर्याप्त कोटा है।'
+          : 'Please ensure your API key is valid and has sufficient quota.'
       ],
       suggestions: [
-        'Check your API key configuration',
-        'Try again in a few moments',
-        'If the problem persists, verify your API key at https://makersuite.google.com/app/apikey'
+        i18n.language === 'hi'
+          ? 'अपनी API कुंजी कॉन्फ़िगरेशन की जाँच करें'
+          : 'Check your API key configuration',
+        i18n.language === 'hi'
+          ? 'कुछ क्षणों में पुनः प्रयास करें'
+          : 'Try again in a few moments',
+        i18n.language === 'hi'
+          ? 'यदि समस्या बनी रहती है, तो अपनी API कुंजी को यहां सत्यापित करें: https://makersuite.google.com/app/apikey'
+          : 'If the problem persists, verify your API key at https://makersuite.google.com/app/apikey'
       ],
       factCheck: {
         isFactual: false,
-        explanation: 'Analysis unavailable: ' + (error.message || 'API Error')
+        explanation: i18n.language === 'hi'
+          ? 'विश्लेषण उपलब्ध नहीं: ' + (error.message || 'API त्रुटि')
+          : 'Analysis unavailable: ' + (error.message || 'API Error')
       },
       statistics,
       timeline: timelineAnalysis,
