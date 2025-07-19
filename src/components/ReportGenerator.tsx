@@ -122,6 +122,173 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({ result, text, 
               text: `${i18n.language === 'hi' ? 'स्कोर' : 'Score'}: ${result.credibilityScore}/100`,
               bold: true,
               size: 28,
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              text: i18n.language === 'hi' ? "एआई फेक न्यूज विश्लेषण रिपोर्ट" : "AI Fake News Analysis Report",
+              heading: HeadingLevel.HEADING_1,
+              alignment: AlignmentType.CENTER,
+              spacing: {
+                after: 400,
+              },
+            }),
+
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `${i18n.language === 'hi' ? 'रिपोर्ट जनरेट की गई' : 'Report Generated'}: ${new Date().toLocaleString()}`,
+                  size: 20,
+                }),
+              ],
+              spacing: {
+                after: 200,
+              },
+            }),
+
+            new Paragraph({
+              text: i18n.language === 'hi' ? "विश्वसनीयता मूल्यांकन" : "Credibility Assessment",
+              heading: HeadingLevel.HEADING_2,
+              spacing: {
+                before: 400,
+                after: 200,
+              },
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `${i18n.language === 'hi' ? 'स्कोर' : 'Score'}: ${result.credibilityScore}/100`,
+                  bold: true,
+                  size: 28,
+                }),
+              ],
+              spacing: {
+                after: 200,
+              },
+            }),
+
+            new Paragraph({
+              text: i18n.language === 'hi' ? "विश्लेषित सामग्री" : "Analyzed Content",
+              heading: HeadingLevel.HEADING_2,
+              spacing: {
+                before: 400,
+                after: 200,
+              },
+            }),
+            new Paragraph({
+              text: text,
+              spacing: {
+                after: 200,
+              },
+            }),
+
+            new Paragraph({
+              text: i18n.language === 'hi' ? "तथ्यात्मक मूल्यांकन" : "Factual Assessment",
+              heading: HeadingLevel.HEADING_2,
+              spacing: {
+                before: 400,
+                after: 200,
+              },
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: result.factCheck.isFactual ? 
+                    (i18n.language === 'hi' ? "✓ सत्यापित" : "✓ Verified") : 
+                    (i18n.language === 'hi' ? "⚠ असत्यापित" : "⚠ Unverified"),
+                  bold: true,
+                  color: result.factCheck.isFactual ? "008000" : "FF0000",
+                }),
+              ],
+              spacing: {
+                after: 200,
+              },
+            }),
+            new Paragraph({
+              text: result.factCheck.explanation,
+              spacing: {
+                after: 400,
+              },
+            }),
+
+            new Paragraph({
+              text: i18n.language === 'hi' ? "सामग्री आंकड़े" : "Content Statistics",
+              heading: HeadingLevel.HEADING_2,
+              spacing: {
+                before: 400,
+                after: 200,
+              },
+            }),
+            new Paragraph({
+              children: [
+                new TextRun(i18n.language === 'hi' ? "शब्द गणना: " : "Word Count: "),
+                new TextRun({
+                  text: `${result.statistics.wordCount}\n`,
+                  bold: true,
+                }),
+                new TextRun(i18n.language === 'hi' ? "पढ़ने का समय: " : "Reading Time: "),
+                new TextRun({
+                  text: `${result.statistics.readingTimeMinutes} ${i18n.language === 'hi' ? 'मिनट' : 'minutes'}\n`,
+                  bold: true,
+                }),
+                new TextRun(i18n.language === 'hi' ? "औसत वाक्य लंबाई: " : "Average Sentence Length: "),
+                new TextRun({
+                  text: `${result.statistics.averageSentenceLength} ${i18n.language === 'hi' ? 'शब्द' : 'words'}\n`,
+                  bold: true,
+                }),
+              ],
+              spacing: {
+                after: 200,
+              },
+            }),
+
+            ...(result.warnings.length > 0 ? [
+              new Paragraph({
+                text: i18n.language === 'hi' ? "चेतावनियां" : "Warnings",
+                heading: HeadingLevel.HEADING_2,
+                spacing: {
+                  before: 400,
+                  after: 200,
+                },
+              }),
+              ...result.warnings.map(
+                warning =>
+                  new Paragraph({
+                    text: `• ${warning}`,
+                    spacing: {
+                      after: 100,
+                    },
+                  })
+              ),
+            ] : []),
+
+            ...(result.suggestions.length > 0 ? [
+              new Paragraph({
+                text: i18n.language === 'hi' ? "सुझाव" : "Suggestions",
+                heading: HeadingLevel.HEADING_2,
+                spacing: {
+                  before: 400,
+                  after: 200,
+                },
+              }),
+              ...result.suggestions.map(
+                suggestion =>
+                  new Paragraph({
+                    text: `• ${suggestion}`,
+                    spacing: {
+                      after: 100,
+                    },
+                  })
+              ),
+            ] : []),
+
+            new Paragraph({
+              text: i18n.language === 'hi' ? "एआई फेक न्यूज डिटेक्टर द्वारा जनरेट किया गया" : "Generated by AI Fake News Detector",
+              alignment: AlignmentType.CENTER,
+              spacing: {
+                before: 400,
+              },
             }),
           ],
           spacing: {

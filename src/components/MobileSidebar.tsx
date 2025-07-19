@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 import { Button } from './ui/button';
 import { Menu, History, Sun, Moon, Info, Zap, ArrowLeft, Languages, Camera, Home } from 'lucide-react';
+import { Menu, History, Sun, Moon, Info, Zap, ArrowLeft, Languages } from 'lucide-react';
 import { useTheme } from './theme-provider';
 import { cn } from '@/lib/utils';
 import { LanguageSelector } from './LanguageSelector';
