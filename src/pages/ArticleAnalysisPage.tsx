@@ -19,7 +19,8 @@ import {
   CheckCircle,
   BookOpen,
   Share2,
-  Home
+  Home,
+  Newspaper // Added for News Page
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -291,6 +292,16 @@ export const ArticleAnalysisPage: React.FC = () => {
                     </span>
                   )}
                 </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  asChild
+                  className="relative"
+                >
+                  <Link to="/news">
+                    <Newspaper className="h-5 w-5" />
+                  </Link>
+                </Button>
                 <Button variant="ghost" size="icon" asChild>
                   <Link to="/about">
                     <Info className="h-5 w-5" />
@@ -420,7 +431,7 @@ export const ArticleAnalysisPage: React.FC = () => {
                         size="lg"
                         className="relative overflow-hidden group"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute inset-0 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                         {isAnalyzing ? (
                           <>
                             <Loader2 className="animate-spin mr-2" />
