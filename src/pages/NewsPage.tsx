@@ -128,6 +128,91 @@ const inferCategory = (title: string, content: string): string => {
   return 'General';
 };
 
+const NewsCardSkeleton = () => (
+  <div className="relative bg-background/95 border border-border/20 rounded-lg p-6 h-full shadow-lg hover:shadow-xl transition-all duration-300">
+    {/* Header */}
+    <div className="flex items-center justify-between gap-4 mb-4">
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 bg-primary/20 rounded animate-pulse" />
+        <div className="h-4 w-32 bg-primary/20 rounded animate-pulse" />
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 bg-primary/20 rounded-full animate-pulse" />
+        <div className="w-8 h-8 bg-primary/20 rounded-full animate-pulse" />
+      </div>
+    </div>
+
+    {/* Thumbnail */}
+    <div className="mb-4">
+      <div className="w-full h-48 bg-primary/20 rounded-md animate-pulse" />
+    </div>
+
+    {/* Category */}
+    <div className="flex items-center gap-2 mb-2">
+      <div className="w-4 h-4 bg-primary/20 rounded animate-pulse" />
+      <div className="h-4 w-24 bg-primary/20 rounded animate-pulse" />
+    </div>
+
+    {/* Title */}
+    <div className="space-y-2 mb-4">
+      <div className="h-7 w-full bg-primary/20 rounded animate-pulse" />
+      <div className="h-7 w-3/4 bg-primary/20 rounded animate-pulse" />
+    </div>
+
+    {/* Content */}
+    <div className="space-y-2 mb-6">
+      <div className="h-4 w-full bg-primary/20 rounded animate-pulse" />
+      <div className="h-4 w-full bg-primary/20 rounded animate-pulse" />
+      <div className="h-4 w-2/3 bg-primary/20 rounded animate-pulse" />
+    </div>
+
+    {/* Footer */}
+    <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/20">
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 bg-primary/20 rounded animate-pulse" />
+        <div className="h-4 w-24 bg-primary/20 rounded animate-pulse" />
+      </div>
+      <div className="h-8 w-24 bg-primary/20 rounded animate-pulse" />
+    </div>
+  </div>
+);
+
+const cardVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  hover: { 
+    y: -5,
+    transition: { duration: 0.2 }
+  }
+};
+
+const ModernSelect = ({ value, onChange, options, placeholder, ariaLabel }) => (
+  <div className="relative group min-w-[180px]">
+    <div className="absolute inset-0 bg-primary/10 rounded-xl blur transition-all duration-300 group-hover:bg-primary/20" />
+    <select
+      value={value}
+      onChange={onChange}
+      className="relative h-12 w-full rounded-xl border-2 border-primary/20 bg-background/95 backdrop-blur-md px-4 shadow-lg transition-all duration-300 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary text-lg appearance-none cursor-pointer pl-10"
+      aria-label={ariaLabel}
+    >
+      <option value="all">{placeholder}</option>
+      {options.map(option => (
+        <option key={option.value} value={option.value}>
+          {option.icon} {option.label}
+        </option>
+      ))}
+    </select>
+    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+      <Globe className="h-5 w-5 text-primary/70" />
+    </div>
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+      <svg className="h-5 w-5 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+  </div>
+);
+
 async function fetchWithCorsProxy(url: string): Promise<Response> {
   try {
     const response = await fetch(CORS_PROXY + encodeURIComponent(url));
@@ -184,91 +269,6 @@ function parseRSS(xml: string): NewsItem[] {
     return [];
   }
 }
-
-const NewsCardSkeleton = () => (
-  <div className="relative bg-background/95 border border-border/20 rounded-lg p-6 h-full shadow-lg hover:shadow-xl transition-all duration-300">
-    {/* Match the NewsCard's outer container styles */}
-    <div className="flex items-center justify-between gap-4 mb-4">
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 bg-primary/20 rounded animate-pulse" />
-        <div className="h-4 w-24 bg-primary/20 rounded animate-pulse" />
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-primary/20 rounded animate-pulse" />
-        <div className="w-8 h-8 bg-primary/20 rounded animate-pulse" />
-      </div>
-    </div>
-
-    {/* Placeholder for thumbnail */}
-    <div className="mb-4">
-      <div className="w-full h-40 bg-primary/20 rounded-md animate-pulse" />
-    </div>
-
-    {/* Placeholder for category */}
-    <div className="flex items-center gap-2 mb-2">
-      <div className="w-4 h-4 bg-primary/20 rounded animate-pulse" />
-      <div className="h-4 w-20 bg-primary/20 rounded animate-pulse" />
-    </div>
-
-    {/* Placeholder for title */}
-    <div className="space-y-2 mb-4">
-      <div className="h-6 w-3/4 bg-primary/20 rounded animate-pulse" />
-      <div className="h-6 w-1/2 bg-primary/20 rounded animate-pulse" />
-    </div>
-
-    {/* Placeholder for content snippet */}
-    <div className="space-y-2 mb-4">
-      <div className="h-4 w-full bg-primary/20 rounded animate-pulse" />
-      <div className="h-4 w-full bg-primary/20 rounded animate-pulse" />
-      <div className="h-4 w-2/3 bg-primary/20 rounded animate-pulse" />
-    </div>
-
-    {/* Placeholder for footer */}
-    <div className="flex items-center justify-between mt-6 pt-4 border-t border-border/20">
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 bg-primary/20 rounded animate-pulse" />
-        <div className="h-4 w-24 bg-primary/20 rounded animate-pulse" />
-      </div>
-      <div className="h-8 w-24 bg-primary/20 rounded animate-pulse" />
-    </div>
-  </div>
-);
-
-const cardVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  hover: { 
-    y: -5,
-    transition: { duration: 0.2 }
-  }
-};
-
-const ModernSelect = ({ value, onChange, options, placeholder, ariaLabel }) => (
-  <div className="relative group min-w-[180px]">
-    <div className="absolute inset-0 bg-primary/10 rounded-xl blur transition-all duration-300 group-hover:bg-primary/20" />
-    <select
-      value={value}
-      onChange={onChange}
-      className="relative h-12 w-full rounded-xl border-2 border-primary/20 bg-background/95 backdrop-blur-md px-4 shadow-lg transition-all duration-300 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary text-lg appearance-none cursor-pointer pl-10"
-      aria-label={ariaLabel}
-    >
-      <option value="all">{placeholder}</option>
-      {options.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.icon} {option.label}
-        </option>
-      ))}
-    </select>
-    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-      <Globe className="h-5 w-5 text-primary/70" />
-    </div>
-    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-      <svg className="h-5 w-5 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-      </svg>
-    </div>
-  </div>
-);
 
 const NewsPage: React.FC = () => {
   const { i18n } = useTranslation();
@@ -386,19 +386,19 @@ const NewsPage: React.FC = () => {
       setSparkles(prevSparkles => 
         prevSparkles.map(sparkle => {
           if (sparkle.isHorizontal) {
-            let newAX = sparkle.x + (sparkle.speed * sparkle.direction);
-            if (newAX < 0 || newAX > window.innerWidth) {
+            let newX = sparkle.x + (sparkle.speed * sparkle.direction);
+            if (newX < 0 || newX > window.innerWidth) {
               sparkle.direction *= -1;
-              newAX = sparkle.x + (sparkle.speed * sparkle.direction);
+              newX = sparkle.x + (sparkle.speed * sparkle.direction);
             }
-            return { ...sparkle, x: newAX };
+            return { ...sparkle, x: newX };
           } else {
-            let newAY = sparkle.y + (sparkle.speed * sparkle.direction);
-            if (newAY < 0 || newAY > window.innerHeight) {
+            let newY = sparkle.y + (sparkle.speed * sparkle.direction);
+            if (newY < 0 || newY > window.innerHeight) {
               sparkle.direction *= -1;
-              newAY = sparkle.y + (sparkle.speed * sparkle.direction);
+              newY = sparkle.y + (sparkle.speed * sparkle.direction);
             }
-            return { ...sparkle, y: newAY };
+            return { ...sparkle, y: newY };
           }
         })
       );
