@@ -18,13 +18,21 @@ import {
   Languages,
   Brain,
   BarChart2,
-  Home
+  Home,
+  ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { MobileSidebar } from '@/components/MobileSidebar';
 import { analyzeText } from '@/utils/newsAnalyzer';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
 
 import Particles from 'react-tsparticles';
 import { loadFull } from 'tsparticles';
@@ -45,27 +53,27 @@ const RSS_FEEDS = [
   {
     url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
     name: 'NY Times',
-    icon: '🗽'
+    icon: '📰' // Newspaper emoji for a classic publication
   },
   {
     url: 'http://feeds.bbci.co.uk/news/rss.xml',
     name: 'BBC News',
-    icon: '🇬🇧'
+    icon: '🌍' // Globe emoji for international coverage
   },
   {
     url: 'https://www.theguardian.com/world/rss',
     name: 'The Guardian',
-    icon: '📰'
+    icon: '🦉' // Owl emoji for wisdom and insight
   },
   {
     url: 'https://feeds.feedburner.com/ndtvnews-top-stories',
     name: 'NDTV',
-    icon: '🇮🇳'
+    icon: '🛡️' // Shield emoji for Indian news authority
   },
   {
     url: 'https://www.thehindu.com/news/national/feeder/default.rss',
     name: 'The Hindu',
-    icon: '🇮🇳'
+    icon: '🏛️' // Classical building emoji for traditional journalism
   },
 ];
 
@@ -426,118 +434,152 @@ const NewsPage: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
               {sortedNews.map((item, index) => (
-                <motion.div
-                  key={item.link}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="group relative"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-lg" />
-                  <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-6 h-full">
-                    <div className="flex items-center justify-between gap-4 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Globe className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium">{item.source}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Share2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
+                <Dialog key={item.link}>
+                  <DialogTrigger asChild>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="group relative cursor-pointer"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-lg" />
+                      <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-6 h-full">
+                        <div className="flex items-center justify-between gap-4 mb-4">
+                          <div className="flex items-center gap-2">
+                            <Globe className="h-4 w-4 text-primary" />
+                            <span className="text-sm font-medium">{item.source}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Share2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
 
-                    <h3 className="mb-2 line-clamp-2 text-xl font-semibold">
-                      {item.title}
-                    </h3>
+                        <h3 className="mb-2 line-clamp-2 text-xl font-semibold">
+                          {item.title}
+                        </h3>
 
-                    <div className="mb-4">
-                      <p className={`text-base text-muted-foreground ${
-                        expandedContent === item.link ? '' : 'line-clamp-3'
-                      }`}>
-                        {item.contentSnippet}
-                      </p>
-                      {item.contentSnippet && item.contentSnippet.length > 200 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="mt-2 h-8 px-2 text-primary"
-                          onClick={() => setExpandedContent(
-                            expandedContent === item.link ? null : item.link
-                          )}
-                        >
-                          {expandedContent === item.link ? 'Show less' : 'Read more'}
-                        </Button>
-                      )}
-                    </div>
+                        <div className="mb-4">
+                          <p className="text-base text-muted-foreground line-clamp-3">
+                            {item.contentSnippet}
+                          </p>
+                        </div>
 
-                    {item.credibilityScore !== undefined ? (
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                          {item.isFactual ? (
-                            <CheckCircle className="h-4 w-4 text-success" />
-                          ) : (
-                            <AlertTriangle className="h-4 w-4 text-warning" />
-                          )}
-                          <span className="text-sm font-medium">
-                            Credibility Score: {item.credibilityScore}%
-                          </span>
+                        <div className="flex items-center justify-between border-t border-border/50 pt-4">
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Clock className="h-4 w-4" />
+                            {format(new Date(item.pubDate), 'MMM d, yyyy')}
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center gap-1"
+                          >
+                            Read More
+                            <ArrowRight className="h-4 w-4" />
+                          </Button>
                         </div>
                       </div>
-                    ) : (
-                      <Button
-                        className="w-full mb-4 bg-primary/10 hover:bg-primary/20 text-primary"
-                        onClick={() => analyzeArticle(item)}
-                        disabled={analyzing}
-                      >
-                        {analyzing ? (
-                          <>
-                            <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                            Analyzing...
-                          </>
-                        ) : (
-                          <>
-                            <Brain className="mr-2 h-4 w-4" />
-                            Analyze Article
-                          </>
-                        )}
-                      </Button>
-                    )}
+                    </motion.div>
+                  </DialogTrigger>
 
-                    {item.warnings && item.warnings.length > 0 && (
-                      <div className="mb-4 space-y-2">
-                        {item.warnings.map((warning, i) => (
-                          <p key={i} className="flex items-start gap-2 text-sm text-warning">
-                            <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                            {warning}
-                          </p>
-                        ))}
+                  <DialogContent className="max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl mb-4">{item.title}</DialogTitle>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                        <div className="flex items-center gap-2">
+                          <Globe className="h-4 w-4" />
+                          {item.source}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4" />
+                          {format(new Date(item.pubDate), 'MMMM d, yyyy')}
+                        </div>
                       </div>
-                    )}
+                    </DialogHeader>
 
-                    <div className="flex items-center justify-between border-t border-border/50 pt-4">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4" />
-                        {format(new Date(item.pubDate), 'MMM d, yyyy')}
+                    <div className="space-y-6">
+                      <div className="prose prose-sm dark:prose-invert max-w-none">
+                        {item.contentSnippet}
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        asChild
-                      >
-                        <a 
-                          href={item.link} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1"
+
+                      {item.credibilityScore !== undefined ? (
+                        <div className="bg-card border border-border rounded-lg p-4 space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-semibold">Analysis Results</h4>
+                            <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
+                              item.isFactual 
+                                ? 'bg-success/10 text-success' 
+                                : 'bg-warning/10 text-warning'
+                            }`}>
+                              {item.isFactual ? (
+                                <CheckCircle className="h-4 w-4" />
+                              ) : (
+                                <AlertTriangle className="h-4 w-4" />
+                              )}
+                              Credibility Score: {item.credibilityScore}%
+                            </span>
+                          </div>
+
+                          {item.warnings && item.warnings.length > 0 && (
+                            <div className="space-y-2">
+                              <h5 className="font-medium text-sm">Warnings</h5>
+                              {item.warnings.map((warning, i) => (
+                                <p key={i} className="flex items-start gap-2 text-sm text-warning">
+                                  <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                                  {warning}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <Button
+                          className="w-full bg-primary/10 hover:bg-primary/20 text-primary"
+                          onClick={() => analyzeArticle(item)}
+                          disabled={analyzing}
                         >
-                          Read Full Article
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
+                          {analyzing ? (
+                            <>
+                              <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                              Analyzing...
+                            </>
+                          ) : (
+                            <>
+                              <Brain className="mr-2 h-4 w-4" />
+                              Analyze Article
+                            </>
+                          )}
+                        </Button>
+                      )}
+
+                      <div className="flex justify-between items-center pt-4 border-t border-border">
+                        <Button variant="outline" size="sm" asChild>
+                          <a 
+                            href={item.link} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2"
+                          >
+                            Visit Source
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            navigator.clipboard.writeText(item.link);
+                          }}
+                        >
+                          <Share2 className="h-4 w-4 mr-2" />
+                          Share
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </DialogContent>
+                </Dialog>
               ))}
             </div>
           )}
