@@ -41,6 +41,7 @@ import { MobileSidebar } from '@/components/MobileSidebar';
 import { VoiceInput } from '@/components/VoiceInput';
 import { LandingPage } from './LandingPage';
 import { Particles } from '@/components/Particles';
+import { UserNav } from '@/components/UserNav';
 
 interface HomePageProps {
   showLanding?: boolean;
@@ -296,11 +297,7 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
           >
             <div className="container mx-auto px-4 py-8">
               <div className="max-w-5xl mx-auto">
-                <motion.div 
-                  className="text-center mb-12 relative"
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <div className="flex items-center justify-between mb-8">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -309,13 +306,13 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
                       setShowLandingPage(true);
                       localStorage.removeItem('skipLanding');
                     }}
-                    className="absolute left-0 top-0 hidden md:flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                    className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     {t('common.back')}
                   </Button>
                   
-                  <div className="absolute right-0 top-0 flex items-center gap-4">
+                  <div className="flex items-center gap-4">
                     <div className="hidden md:flex items-center gap-2">
                       <Button
                         variant="ghost"
@@ -357,6 +354,7 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
                       </Button>
                       <LanguageSelector />
                       <ThemeToggle />
+                      <UserNav />
                     </div>
                     <div className="md:hidden">
                       <MobileSidebar
@@ -370,7 +368,13 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
                       />
                     </div>
                   </div>
+                </div>
 
+                <motion.div 
+                  className="text-center mb-12"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
                   <div className="flex justify-center items-center gap-3 mb-4">
                     <div className="relative">
                       <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
@@ -689,7 +693,6 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
                                     <li key={i} className="flex items-start text-sm">
                                       <span className="mr-2 text-warning">•</span>
                                       <span className="text-foreground">{warning}</span>
-                                
                                     </li>
                                   ))}
                                   {result.warnings.length === 0 && (

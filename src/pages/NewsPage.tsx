@@ -39,6 +39,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
+import { UserNav } from '@/components/UserNav'; // Placeholder import - adjust path as needed
 
 interface NewsItem {
   title: string;
@@ -634,6 +635,7 @@ const NewsPage: React.FC = () => {
                   </Link>
                 </Button>
                 <ThemeToggle />
+                <UserNav />
               </div>
               <div className="md:hidden">
                 <MobileSidebar
