@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, CheckCircle, Info, Loader2, BookOpen, Share2, FileText, Sparkles, Zap, HelpCircle, History, GitCompare, Plus, ArrowLeft, Camera } from 'lucide-react';
-import { AlertTriangle, CheckCircle, Info, Loader2, BookOpen, Share2, FileText, Sparkles, Zap, HelpCircle, History, GitCompare, Plus, ArrowLeft } from 'lucide-react';
 import { analyzeText } from '@/utils/newsAnalyzer';
 import { AnalysisResult, HistoricalAnalysis } from '@/utils/types';
 import { CredibilityMeter } from '@/components/CredibilityMeter';
@@ -235,7 +234,6 @@ export const HomePage: React.FC = () => {
       <div className="fixed inset-0 bg-gradient-to-br from-slate-50/80 via-white to-slate-50/80 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950/80" />
       
       <div className="fixed inset-0 bg-[linear-gradient(to_right,#93c5fd_1px,transparent_1px),linear-gradient(to_bottom,#93c5fd_1px,transparent_1px)] bg-[size:4rem_4rem] dark:bg-[linear-gradient(to_right,#334155_1px,transparent_1px),linear_gradient(to_bottom,#334155_1px,transparent_1px)] opacity-50 transition-opacity duration-300" />
-      <div className="fixed inset-0 bg-[linear-gradient(to_right,#93c5fd_1px,transparent_1px),linear-gradient(to_bottom,#93c5fd_1px,transparent_1px)] bg-[size:4rem_4rem] dark:bg-[linear-gradient(to_right,#334155_1px,transparent_1px),linear-gradient(to_bottom,#334155_1px,transparent_1px)] opacity-50 transition-opacity duration-300" />
       
       <div className="fixed inset-0 bg-[radial-gradient(100%_100%_at_50%_0%,#ffffff_0%,rgba(255,255,255,0)_100%)] dark:bg-[radial-gradient(100%_100%_at_50%_0%,rgba(30,41,59,0.5)_0%,rgba(30,41,59,0)_100%)]" />
       
@@ -694,8 +692,6 @@ export const HomePage: React.FC = () => {
           </motion.div>
         </AnimatePresence>
       )}
-   </div>
-    );
+    </div>
+  );
 };
-  
-  

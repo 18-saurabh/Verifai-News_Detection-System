@@ -59,13 +59,6 @@
       "analysis": "विश्लेषण",
       "suggestions": "सुझाव",
       "noWarnings": "कोई चेतावनी नहीं मिली"
-    },
-    "analysis": {
-      "title": "सामग्री विश्लेषण",
-      "sentiment": "भावना विश्लेषण",
-      "readability": "पठनीयता",
-      "score": "स्कोर",
-      "bias": "पक्षपात विश्लेषण"
     }
   },
   "results": {
