@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -20,6 +20,7 @@ import {
   Camera, 
   Newspaper,
   Brain,
+  MessageCircle,
   BarChart2
 } from 'lucide-react';
 import { analyzeText } from '@/utils/newsAnalyzer';
@@ -42,6 +43,8 @@ import { VoiceInput } from '@/components/VoiceInput';
 import { LandingPage } from './LandingPage';
 import { Particles } from '@/components/Particles';
 import { UserNav } from '@/components/UserNav';
+import { useAuth } from '@/components/AuthProvider';
+import { saveAnalysis, getAnalysisHistory, deleteAnalysis } from '@/lib/firestore';
 
 interface HomePageProps {
   showLanding?: boolean;
@@ -49,6 +52,7 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const [text, setText] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -63,19 +67,31 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
   const [showLandingPage, setShowLandingPage] = useState(showLanding);
   const [sparkles, setSparkles] = useState([]);
   const [isListening, setIsListening] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const savedHistory = localStorage.getItem('analysis-history');
-    if (savedHistory) {
-      setHistory(JSON.parse(savedHistory));
-    }
-
     const skipLanding = localStorage.getItem('skipLanding') === 'true';
     if (skipLanding) {
       setShowLandingPage(false);
       setShowAnalyzer(true);
     }
-  }, []);
+
+    if (user) {
+      loadHistory();
+    }
+  }, [user]);
+
+  const loadHistory = async () => {
+    if (!user || !user.uid) return;
+    try {
+      const userHistory = await getAnalysisHistory(user.uid);
+      setHistory(userHistory);
+    } catch (error) {
+      console.error('Error loading history:', error);
+      setErrorMessage('Failed to load history. Please try again.');
+    }
+  };
 
   const handleStartAnalyzing = () => {
     setShowLandingPage(false);
@@ -175,7 +191,7 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
   };
 
   const handleAnalysis = async () => {
-    if (!text.trim()) return;
+    if (!text.trim() || !user) return;
     
     setIsAnalyzing(true);
     try {
@@ -190,11 +206,11 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
         statistics: analysis.statistics
       };
       
-      const updatedHistory = [newAnalysis, ...history].slice(0, 10);
-      setHistory(updatedHistory);
-      localStorage.setItem('analysis-history', JSON.stringify(updatedHistory));
+      await saveAnalysis(user.uid, newAnalysis);
+      await loadHistory();
     } catch (error) {
       console.error('Analysis failed:', error);
+      setErrorMessage('Analysis failed. Please try again.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -211,6 +227,7 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
       setText('');
     } catch (error) {
       console.error('Analysis failed:', error);
+      setErrorMessage('Analysis failed. Please try again.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -241,6 +258,7 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
       alert('Analysis copied to clipboard!');
     } catch (err) {
       console.error('Failed to copy:', err);
+      setErrorMessage('Failed to copy analysis to clipboard.');
     }
   };
 
@@ -251,10 +269,24 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
     setShowHistory(false);
   };
 
-  const handleHistoryDelete = (id: string) => {
-    const updatedHistory = history.filter(item => item.id !== id);
-    setHistory(updatedHistory);
-    localStorage.setItem('analysis-history', JSON.stringify(updatedHistory));
+  const handleHistoryDelete = async (id: string) => {
+    if (!user || !user.uid) {
+      setErrorMessage('User not authenticated. Please sign in again.');
+      return;
+    }
+    try {
+      console.log(`Attempting to delete analysis with ID: ${id} for user: ${user.uid}`);
+      await deleteAnalysis(user.uid, id);
+      console.log(`Firestore deletion successful for ID: ${id}`);
+      // Only update UI after successful Firestore deletion
+      setHistory(prevHistory => prevHistory.filter(item => item.id !== id));
+      setErrorMessage(null); // Clear any previous error
+    } catch (error) {
+      console.error('Error deleting analysis:', error);
+      setErrorMessage('Failed to delete analysis from Firestore. Please try again.');
+      // Revert UI if deletion fails (optional, depending on UX preference)
+      await loadHistory(); // Reload history to sync with Firestore
+    }
   };
 
   return (
@@ -297,6 +329,12 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
           >
             <div className="container mx-auto px-4 py-8">
               <div className="max-w-5xl mx-auto">
+                {errorMessage && (
+                  <div className="mb-4 p-4 bg-destructive/10 border border-destructive/30 rounded-lg text-destructive-foreground">
+                    {errorMessage}
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between mb-8">
                   <Button
                     variant="ghost"
@@ -345,6 +383,16 @@ export const HomePage: React.FC<HomePageProps> = ({ showLanding = true }) => {
                       >
                         <Link to="/news">
                           <Newspaper className="h-5 w-5" />
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        asChild
+                        className="relative"
+                      >
+                        <Link to="/social">
+                          <MessageCircle className="h-5 w-5" />
                         </Link>
                       </Button>
                       <Button variant="ghost" size="icon" asChild>
