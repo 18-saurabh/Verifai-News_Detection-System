@@ -1,7 +1,7 @@
 # Verifai - AI-Powered Content Verification Platform 🔍
 
 <div align="center">
-  <img src="/public/logo.svg" alt="Verifai Logo" width="200" />
+  <img src="/public/Thumbnail.png" alt="Verifai Thumbnail" width="400" />
   <p align="center">
     <strong>Combat misinformation with advanced AI-powered content verification</strong>
   </p>
@@ -78,6 +78,10 @@
 ![Community Design](/public/community-feed.png)
 *Social features for collaborative verification*
 
+## Architecture Diagram
+
+![Architecture Diagram](public/Verifai%20Flowchart.png)
+
 ## 🛠️ Tech Stack
 
 ### Frontend
@@ -90,7 +94,6 @@
 
 ### AI & ML
 - 🧠 Google Gemini AI
-- 📊 TensorFlow.js
 - 🔍 OCR Capabilities
 
 ### Authentication & Database
@@ -99,7 +102,6 @@
 - 🔐 Secure Data Storage
 
 ### State Management & Utilities
-- 🐻 Zustand
 - 🌐 i18next
 - 📝 React Markdown
 - 📊 Various Data Processing Libraries
@@ -108,7 +110,7 @@
 
 1. **Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/verifai.git
+git clone https://github.com/panduthegang/Fake-News-Detection-System.git
 cd verifai
 ```
 
@@ -140,13 +142,6 @@ npm run dev
 npm run build
 ```
 
-## 📖 Documentation
-
-- [API Documentation](/docs/api.md)
-- [Architecture Overview](/docs/architecture.md)
-- [Component Guide](/docs/components.md)
-- [Setup Guide](/docs/setup.md)
-
 ## 🤝 Contributing
 
 We welcome contributions! Please follow these steps:
@@ -157,26 +152,19 @@ We welcome contributions! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - Google Gemini AI for powering content analysis
 - The React and Vite communities
-- All our contributors and supporters
 - Open source libraries and tools used in this project
 
 ## 📬 Contact
 
-- Website: [verifai.ai](https://verifai.ai)
-- Email: contact@verifai.ai
-- Twitter: [@VerifaiAI](https://twitter.com/VerifaiAI)
-- LinkedIn: [Verifai](https://linkedin.com/company/verifai)
+- Website: [verifai.vercel.app](https://verifai-by-harsh-pooja.vercel.app/)
+- Email: panduthegang@gmail.com
 
 ---
 
 <div align="center">
-  <p>Built with ❤️ by the Verifai Team</p>
+  <p>Built with ❤️ by the AI Guardians Team</p>
 </div>

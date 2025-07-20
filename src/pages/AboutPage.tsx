@@ -28,49 +28,48 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Harsh Rathod',
     role: 'Team Lead and Developer',
-    image: '/Harsh.png',
+    image: '/Harsh.jpg',
     bio: 'Leads the Verifai project with expertise in full-stack development, architecting frontend and backend systems.',
     social: {
-      linkedin: 'https://linkedin.com',
-      github: 'https://github.com',
-      email: 'mailto:harsh@verifai.ai'
+      linkedin: 'https://www.linkedin.com/in/harsh-rathod-2591b0292/',
+      github: 'https://github.com/panduthegang',
+      email: 'mailto:harshsrathod959@gmail.com'
     }
   },
   {
     name: 'Pooja Purohit',
     role: 'Machine Learning Engineer',
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=500&h=500',
+    image: '/Pooja.jpg',
     bio: 'Designs and trains AI models for credibility scoring and misinformation detection.',
     social: {
-      linkedin: 'https://linkedin.com',
-      github: 'https://github.com',
-      email: 'mailto:pooja@verifai.ai'
+      linkedin: 'http://www.linkedin.com/in/pooja-purohit-749778282',
+      github: 'https://github.com/ailuropix',
+      email: 'mailto:purohitpooja321@gmail.com'
     }
   },
   {
-    name: 'Saurabh Patel',
-    role: 'Data Analyst',
-    image: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=500&h=500', 
-    bio: 'Ensures data quality and generates insightful reports.',
+    name: 'David Park',
+    role: 'Full Stack Developer',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=500&h=500',
+    bio: 'Expert in modern web technologies and cloud architecture. Ensures seamless integration of AI capabilities across the platform.',
     social: {
       linkedin: 'https://linkedin.com',
       github: 'https://github.com',
-      email: 'mailto:saurabh@verifai.ai'
+      email: 'mailto:david@verifai.ai'
     }
   },
   {
-    name: 'Saachi Desai',
-    role: 'UI/UX Designer',
-    image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&q=80&w=500&h=500', 
-    bio: 'Crafts intuitive and responsive interfaces.',
+    name: 'Aisha Khan',
+    role: 'Data Science Lead',
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=500&h=500',
+    bio: 'PhD in Computer Science with focus on data analytics and machine learning. Leads data-driven decision making and model optimization.',
     social: {
       linkedin: 'https://linkedin.com',
       github: 'https://github.com',
-      email: 'mailto:saachi@verifai.ai'
+      email: 'mailto:aisha@verifai.ai'
     }
   }
 ];
-
 
 const features: Feature[] = [
   {
@@ -303,12 +302,11 @@ export const AboutPage: React.FC = () => {
               <h2 className="text-3xl font-bold text-center mb-8">Our Story</h2>
               <div className="bg-card border border-border rounded-2xl p-8 shadow-lg">
                 <p className="text-muted-foreground leading-relaxed mb-6">
-  Verifai was born out of a shared mission to counter the growing impact of misinformation in the digital age. Our team of developers, designers, and AI enthusiasts came together with a vision to build a reliable, easy-to-use platform that helps people verify the authenticity of online content.
-</p>
-<p className="text-muted-foreground leading-relaxed">
-  By combining the power of machine learning, natural language processing, and carefully selected APIs, we’ve created a system that can detect credibility signals, uncover bias, and highlight factual inconsistencies. We’re committed to making information verification smarter, faster, and more accessible for everyone.
-</p>
-
+                  Verifai was born from a shared concern about the rapid spread of misinformation in today's digital landscape. Our team of AI specialists, developers, and designers came together with a common goal: to create a powerful yet accessible tool that helps people verify information quickly and accurately.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Using Google's advanced Gemini AI technology, we've developed a sophisticated system that analyzes content across multiple dimensions - from factual accuracy to bias detection. Our commitment to transparency and accuracy drives us to continuously improve and adapt our technology to meet the evolving challenges of digital misinformation.
+                </p>
               </div>
             </motion.div>
           </div>
